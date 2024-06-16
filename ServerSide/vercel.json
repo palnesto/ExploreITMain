@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "connectingids",
+  "builds": [
+    {
+      "src": "src/index.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["src/**"] }
+    }
+  ],
+  "routes": [{ "src": "/(.*)", "dest": "src/index.js" }]
+}

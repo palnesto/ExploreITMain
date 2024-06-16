@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "imported";
+  src: url("/Adminside/fonts/Urbanist-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+h1 {
+  font-family: "imported", sans-serif;
+}
