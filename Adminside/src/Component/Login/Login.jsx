@@ -10,14 +10,13 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login } = useLoginStore();
+    const login = useLoginStore((state) => state.login);
     const navigate = useNavigate();
 
-    async function Loginfunction() {
+    async function loginFunction() {
         try {
             const config = {
                 method: "POST",
-                mode: "cors",
                 url: `${API_BASE_URL}/V1/userLogin`,
                 headers: {
                     "Content-Type": "application/json",
@@ -30,7 +29,7 @@ const Login = () => {
             };
             const response = await axios(config);
 
-            if (response.status === 200) {
+            if (response.status === 200 && response.data.token) {
                 const token = response.data.token;
                 login(token);
                 toast.success("User logged in successfully");
@@ -66,7 +65,7 @@ const Login = () => {
                             className="w-[20rem] h-10 px-2 mb-4 border-2 border-[#AEAEAE] rounded"
                         />
                     </div>
-                    <button onClick={Loginfunction} className="flex items-center justify-center ml-[10rem] w-[10rem] py-2 text-white bg-black rounded">
+                    <button onClick={loginFunction} className="flex items-center justify-center ml-[10rem] w-[10rem] py-2 text-white bg-black rounded">
                         <IoKey className="mr-2" /> Sign in to admin
                     </button>
                 </div>

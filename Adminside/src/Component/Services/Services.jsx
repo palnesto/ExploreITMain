@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { API_BASE_URL } from "../../config";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useLoginStore from '../../store/useLoginStore';
 
 const Services = () => {
     const navigate = useNavigate();
@@ -14,12 +15,16 @@ const Services = () => {
     const [editingIndex, setEditingIndex] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [services, setServices] = useState([]);
-
+    const { token } = useLoginStore();
     // Fetch services on load
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/v1/getPrimary`);
+                const response = await axios.get(`${API_BASE_URL}/v1/getPrimary`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 if (response.data && response.data.status) {
                     setServices(response.data.data);
                 } else {
@@ -30,8 +35,7 @@ const Services = () => {
             }
         };
         fetchServices();
-    }, []);
-
+    }, [token]);
 
     const handleClosePopup = () => {
         setIsPopupOpen(false);

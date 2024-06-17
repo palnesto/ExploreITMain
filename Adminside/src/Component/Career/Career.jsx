@@ -6,16 +6,22 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../config';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useLoginStore from '../../store/useLoginStore';
 const Careers = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [careers, setCareers] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
+    const { token } = useLoginStore();
 
     useEffect(() => {
         const fetchCareers = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/v1/getCareer`);
+                const response = await axios.get(`${API_BASE_URL}/v1/getCareer`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 if (response.data && response.data.status) {
                     setCareers(response.data.data);
                 } else {
@@ -127,7 +133,7 @@ const Careers = () => {
                     />
                 )}
                 <div className='2xl:w-4/5 3xl:w-4/5 lg:w-[46rem] xl:w-3/4 p-6 bg-white rounded-lg shadow-lg ml-[16rem]'>
-                    <div className="grid grid-cols-1 gap-2 px-2 pt-[2rem] pb-[10rem] rounded-lg md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
+                    <div className="grid grid-cols-1 2xl:gap-4 3xl:gap-4 xl:gap-4 lg:gap-4 px-2 pt-[2rem] pb-[10rem] rounded-lg md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-7">
                         {filteredCareers.map((career, index) => (
                             <div
                                 key={index}
