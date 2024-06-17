@@ -1,15 +1,15 @@
 import { create } from "zustand";
 
 const useLoginStore = create((set) => ({
-  isLoggedIn: sessionStorage.getItem("isLoggedIn") === "true",
-  login: () => {
-    sessionStorage.setItem("isLoggedIn", "true");
-    set({ isLoggedIn: true });
+  token: sessionStorage.getItem("token") || null,
+  isLoggedIn: !!sessionStorage.getItem("token"),
+  login: (token) => {
+    sessionStorage.setItem("token", token);
+    set({ token, isLoggedIn: true });
   },
   logout: () => {
-    sessionStorage.setItem("isLoggedIn", "false");
-    sessionStorage.removeItem("token"); // Also remove the token
-    set({ isLoggedIn: false });
+    sessionStorage.removeItem("token");
+    set({ token: null, isLoggedIn: false });
   },
 }));
 

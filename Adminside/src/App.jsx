@@ -1,4 +1,3 @@
-
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -17,24 +16,17 @@ function App() {
   const { isLoggedIn } = useLoginStore();
   return (
     <Router>
-
       <ToastContainer className="!z-[999999]" />
-      <div className="flex w-[100vw] min-h-screen  bg-[#F1F1F1] ">
-
+      <div className="flex w-[100vw] min-h-screen bg-[#F1F1F1] example">
         {isLoggedIn && <Sidebar />}
         <div className="flex-grow">
           <Routes>
             {!isLoggedIn ? (
-              <>
-                <Route path="*" element={<Login />} />
-
-              </>
+              <Route path="*" element={<Login />} />
             ) : (
               <>
                 <Route path="/" element={<Services />} />
-
                 <Route path="/Subservice" element={<Subservice />} />
-
                 <Route path="/SubServicePopup" element={<SubServicePopup />} />
                 <Route path="/Career" element={<Career />} />
                 <Route path="/Blogs" element={<Blogs />} />
@@ -44,7 +36,7 @@ function App() {
         </div>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

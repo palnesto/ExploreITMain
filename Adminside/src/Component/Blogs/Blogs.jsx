@@ -122,7 +122,7 @@ const Blogs = () => {
                         onDelete={handleDelete}
                     />
                 )}
-                <div className='w-4/5 p-6 bg-white rounded-lg shadow-lg ml-[16rem]'>
+                <div className='2xl:w-4/5 3xl:w-4/5 lg:w-[46rem] xl:w-3/4 p-6 bg-white rounded-lg shadow-lg ml-[16rem]'>
                     <div className="grid grid-cols-1 gap-2 px-2 pt-[2rem] pb-[10rem] rounded-lg md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
                         {filteredBlogs.map((blog, index) => (
                             <div
@@ -145,7 +145,7 @@ const Blogs = () => {
                                         />
                                     )}
                                 </div>
-                                <span className="text-lg font-semibold">{blog.BlogName}</span>
+                                <span className="text-lg font-semibold whitespace-normal text-ellipsis">{blog.BlogName}</span>
                                 <div className="flex items-center mt-2 mb-4 space-x-2">
                                     <button onClick={(e) => { e.stopPropagation(); togglePublished(index); }}>
                                         {blog.Active ? <BiShow className="p-1 text-gray-600 border border-gray-300 rounded-md" size={24} /> : <BiHide className="p-1 text-gray-400 border border-gray-300 rounded-md" size={24} />}

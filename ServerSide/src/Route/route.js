@@ -8,7 +8,7 @@ const {
   getusersData,
   deleteUser,
   logout,
-  createUser
+
 } = require("../Controllers/loginController");
 const {
   userformData,
@@ -17,10 +17,6 @@ const {
   DeleteuserformData,
 } = require("../Controllers/userformController");
 
-const { ClientRoles } = require("../clientRole");
-
-const currentUser = require("../middleware/currentUser");
-const auth = require("../middleware/auth");
 
 const {
   PrimaryData,
@@ -29,11 +25,12 @@ const {
   updatePrimaryData,
   DeletePrimarydata,
   DeleteByPrimaryId,
-  // saveImage,
+  saveImage,
 
 } = require("../Controllers/ServiceController")
 
 const {
+  saveSubimg,
   SubServiceData,
   getsubServiceData,
   getBySubServiceId,
@@ -51,6 +48,7 @@ const {
   DeleteByCareerId
 } = require("../Controllers/CareerController")
 const {
+  saveBlogImage,
   CreateBlog,
   getBlog,
   getByBlogId,
@@ -58,6 +56,11 @@ const {
   DeleteBlog,
   DeleteByBlogId
 } = require("../Controllers/BlogController")
+const { ClientRoles } = require("../clientRole");
+const currentUser = require("../middleware/currentUser");
+const auth = require("../middleware/auth");
+const authMidd = require("../middleware/authorization");
+//****************************************************************** */
 //userForm
 
 router.post(
@@ -75,7 +78,7 @@ router.delete(
 );
 
 //login
-router.post("/v1/create", createUser)
+// router.post("/v1/create", createUser)
 router.post("/v1/userLogin", userLogin);
 router.get("/v1/getuser", getusersData);
 router.delete("/v1/deleteusers", deleteUser)
@@ -83,6 +86,7 @@ router.post("/v1/logout", logout)
 
 
 //PrimaryService
+router.post("/V1/uploadImg", saveImage);
 router.post("/v1/Service", PrimaryData);
 router.get("/v1/getPrimary", getPrimaryData);
 router.get("/v1/getbyPrimary/:primaryId", getByPrimaryId);
@@ -117,6 +121,7 @@ router.delete("/v1/deletBlogbyId/:BlogId", DeleteByBlogId)
 
 
 //aws
-// router.post("/V1/uploadImg", saveImage);
-
+router.post("/V1/uploadImg", saveImage);
+router.post("/V1/subserviceimg", saveSubimg)
+router.post("/V1/blogImg", saveBlogImage)
 module.exports = router;

@@ -26,7 +26,7 @@ const Careerpop = ({ onClose, onSubmit, initialData, onDelete }) => {
                 </div>
 
                 <div className='bg-[#F5F5F5] p-6 rounded-lg mb-6'>
-                    <h1 className="mb-2 text-lg font-medium text-start">Career Name</h1>
+                    <h1 className="mb-2 text-lg font-medium whitespace-normal text-start text-ellipsis">Career Name</h1>
                     <input
                         className="w-[16rem] h-10 px-4 mb-4 border border-[#E1E1E1] rounded"
                         type="text"
@@ -35,7 +35,7 @@ const Careerpop = ({ onClose, onSubmit, initialData, onDelete }) => {
                         placeholder="Add Name"
                     />
                     <div className='flex flex-row items-center justify-between mb-2'>
-                        <h1 className="text-lg font-medium text-start">Add Description</h1>
+                        <h1 className="text-lg font-medium whitespace-normal text-start text-ellipsis">Add Description</h1>
                         <div className="text-sm text-gray-400">
                             {`${maxDescriptionLength - careerDescription.length}/${maxDescriptionLength} remaining`}
                         </div>

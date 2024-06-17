@@ -2,6 +2,9 @@ import { useRef, useState } from 'react';
 import { LuImagePlus } from 'react-icons/lu';
 import { RxCross2 } from 'react-icons/rx';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { API_BASE_URL } from '../../config';
+import { toast } from 'react-toastify';
 
 const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
     const [heading, setHeading] = useState(initialData?.BlogName || '');
@@ -10,7 +13,30 @@ const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
 
     const maxDescriptionLength = 300;
     const fileInputRef = useRef(null);
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            console.error("No file selected.");
+            return;
+        }
 
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const response = await axios.post(`${API_BASE_URL}/V1/blogImg`, formData);
+            const newImageUrl = response.data.imageUrl;
+            if (newImageUrl) {
+                toast.success("Image uploaded successfully");
+                setImage(newImageUrl); // Update the state with the URL from AWS
+            } else {
+                console.error("Failed to upload image. No URL returned from the server.");
+            }
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            toast.error("Failed to upload image");
+        }
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {
@@ -26,16 +52,6 @@ const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
         onDelete(initialData);
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
 
     const handleImageUploadClick = () => {
         fileInputRef.current.click();
@@ -43,7 +59,7 @@ const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-end bg-black bg-opacity-50 backdrop-blur">
-            <div className="w-1/2 h-full p-10 bg-white rounded-lg shadow-lg">
+            <div className="h-full p-10 bg-white rounded-lg shadow-lg 2xl:w-1/2 3xl:w-1/2 lg:w-3/4 ">
                 <div className='flex flex-row items-center justify-between'>
                     <h1 className="mt-0 mb-4 text-2xl font-bold text-start">{initialData ? 'Edit Blog' : 'New Blog'}</h1>
                     <RxCross2 className='cursor-pointer' size={32} onClick={onClose} />
@@ -82,14 +98,14 @@ const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
                                     type="file"
                                     ref={fileInputRef}
                                     style={{ display: 'none' }}
-                                    onChange={handleImageChange}
+                                    onChange={handleImageUpload}
                                     accept="image/*"
                                 />
                             </div>
                         </div>
                         <div className='flex flex-col'>
                             <div className='flex flex-row items-center justify-between mb-2'>
-                                <h1 className="text-lg font-medium text-start">Service Description</h1>
+                                <h1 className="text-lg font-medium whitespace-normal text-start text-ellipsis">Service Description</h1>
                                 <div className="text-sm text-gray-400">
                                     {`${maxDescriptionLength - description.length}/${maxDescriptionLength} remaining`}
                                 </div>
@@ -104,7 +120,7 @@ const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center space-x-8">
+                <div className="flex justify-center mt-8 space-x-8">
                     <button
                         className="px-6 py-2 font-medium text-black border-2 border-gray-300 rounded-md"
                         onClick={initialData ? handleDelete : onClose}

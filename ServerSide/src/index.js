@@ -5,14 +5,26 @@ const { default: mongoose } = require("mongoose");
 const { Route } = require("express");
 const cors = require("cors");
 const app = express();
-
+const multer = require("multer");
+const cookieSession = require("cookie-session");
 // Enable All CORS Requests for development use
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  credentials: true,
-};
-app.use(cors(corsOptions));
 
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:444"
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "Origin", "Cookie"],
+  })
+);
+app.use(multer().any());
+require('dotenv').config()
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -26,7 +38,15 @@ mongoose
   )
   .then(() => console.log("MongoDb is connected"))
   .catch((err) => console.log(err));
+app.use(
+  cookieSession({
+    signed: false,
 
+    secure: false,
+
+    sameSite: "strict",
+  })
+);
 app.use("/", route);
 
 app.listen(process.env.PORT || 3000, function () {

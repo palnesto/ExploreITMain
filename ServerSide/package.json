@@ -15,6 +15,7 @@
     "@azure/msal-node": "^1.18.0",
     "aws-sdk": "^2.1545.0",
     "axios": "^1.5.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",

@@ -5,7 +5,7 @@ const requireAuthorization = (roles) => {
 
     const checkAuthorization = (req, res, next) => {
 
-        if (req.hostname === 'palnesto.com' && (req.method === 'GET')) {
+        if (req.hostname === 'localhost.com' && (req.method === 'GET')) {
             next();
             return;
         }

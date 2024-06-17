@@ -2,6 +2,9 @@ import { useRef, useState, useEffect } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import { RxCross2 } from 'react-icons/rx';
 import PropTypes from 'prop-types';
+import axios from "axios";
+import { API_BASE_URL } from "../../config";
+import { toast } from "react-toastify";
 
 const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
     const [subServiceName, setSubServiceName] = useState("");
@@ -42,49 +45,53 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
         setAddFeatures([...addFeatures, '']);
     };
 
-    const handleImageChange1 = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPhoto1(reader.result);
-            };
-            reader.readAsDataURL(file);
+    const handleImageUpload = async (file, setImageCallback) => {
+        if (!file) {
+            console.error("No file selected.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const response = await axios.post(`${API_BASE_URL}/V1/subserviceimg`, formData);
+            const newImageUrl = response.data.imageUrl;
+            if (newImageUrl) {
+                toast.success("Image uploaded successfully");
+                setImageCallback(newImageUrl); // Update the state with the URL from AWS
+            } else {
+                console.error("Failed to upload image. No URL returned from the server.");
+            }
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            toast.error("Failed to upload image");
         }
     };
 
-    const handleImageUploadClick1 = () => {
-        fileInputRef1.current.click();
-    };
+    const handleImageChange1 = (e) => handleImageUpload(e.target.files[0], setPhoto1);
+    const handleImageChange2 = (e) => handleImageUpload(e.target.files[0], setPhoto2);
+    const handleImageChange3 = (e) => handleImageUpload(e.target.files[0], setPhoto3);
 
-    const handleImageChange2 = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPhoto2(reader.result);
-            };
-            reader.readAsDataURL(file);
+    const handleImageUploadClick = (ref) => {
+        if (ref && ref.current) {
+            ref.current.click();
         }
     };
 
-    const handleImageUploadClick2 = () => {
-        fileInputRef2.current.click();
-    };
-
-    const handleImageChange3 = (e) => {
-        const file = e.target.files[0];
+    const handleImageChange4 = (index, event) => {
+        const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPhoto3(reader.result);  // Single image
-            };
-            reader.readAsDataURL(file);
+            handleImageUpload(file, (url) => {
+                const newImages = [...photo4];
+                newImages[index] = url;
+                setPhoto4(newImages);
+            });
         }
     };
 
-    const handleImageUploadClick3 = () => {
-        fileInputRef3.current.click();  // Single ref for single image
+    const addImageBox4 = () => {
+        setPhoto4([...photo4, '']);
     };
 
     const removeImageBox4 = (index) => {
@@ -93,25 +100,10 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
         setPhoto4(newImages);
     };
 
-    const handleImageChange4 = (index, event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const newImages = [...photo4];
-                newImages[index] = reader.result;
-                setPhoto4(newImages);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const addImageBox4 = () => {
-        setPhoto4([...photo4, '']);
-    };
-
     const handleImageUploadClick4 = (index) => {
-        fileInputRefs4.current[index].click();
+        if (fileInputRefs4.current[index]) {
+            fileInputRefs4.current[index].click();
+        }
     };
 
     const handleDelete = () => {
@@ -134,7 +126,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-end overflow-auto bg-black bg-opacity-50 backdrop-blur">
-            <div className="w-3/5 h-full p-10 overflow-y-auto bg-white rounded-lg shadow-lg">
+            <div className="h-full p-10 overflow-y-auto bg-white rounded-lg shadow-lg 2xl:w-3/5 3xl:3/5 lg:3/4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-2xl font-bold">{initialData ? 'Edit Sub Service' : 'New Sub Service'}</h1>
                     <RxCross2 className="cursor-pointer" size={32} onClick={onClose} />
@@ -145,7 +137,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                         <div className='flex flex-row'>
                             <div
                                 className="flex items-center justify-center w-[10rem] p-4 mb-6 bg-[#F5F5F5] rounded-md cursor-pointer"
-                                onDoubleClick={handleImageUploadClick1}
+                                onDoubleClick={() => handleImageUploadClick(fileInputRef1)}
                             >
                                 {photo1 ? (
                                     <img src={photo1} alt="Uploaded" className="object-cover w-full h-full mr-4" />
@@ -182,7 +174,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                     </div>
                     <div
                         className="flex items-center justify-center 3xl:w-[30rem] 2xl:w-[24rem] xl:w-[24rem] lg:w-[24rem] h-[10rem] p-4 mb-6 bg-[#F5F5F5] border-2 border-[#2E2E2E0D] rounded-md cursor-pointer"
-                        onDoubleClick={handleImageUploadClick2}
+                        onDoubleClick={() => handleImageUploadClick(fileInputRef2)}
                     >
                         {photo2 ? (
                             <img src={photo2} alt="Uploaded" className="object-cover w-full h-full mr-4" />
@@ -202,7 +194,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                     <div className='flex flex-row items-start space-x-6'>
                         <div className='flex flex-col'>
                             <div className='flex flex-row items-center justify-between mb-2'>
-                                <h1 className="text-lg font-medium text-start">Service Description</h1>
+                                <h1 className="text-lg font-medium whitespace-normal text-start text-ellipsis">Service Description</h1>
                                 <div className="text-sm text-gray-400">
                                     {`${maxDescriptionLength - subServiceDes.length}/${maxDescriptionLength} remaining`}
                                 </div>
@@ -224,7 +216,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                             </div>
                             <div
                                 className="flex items-center justify-center 3xl:w-[30rem] 2xl:w-[24rem] xl:w-[24rem] lg:w-[24rem] h-[10rem] p-4 mb-6 bg-[#F5F5F5] border-2 border-[#2E2E2E0D] rounded-md cursor-pointer"
-                                onDoubleClick={handleImageUploadClick3}
+                                onDoubleClick={() => handleImageUploadClick(fileInputRef3)}
                             >
                                 {photo3 ? (
                                     <img src={photo3} alt="Uploaded" className="object-cover w-full h-full mr-4" />
@@ -246,7 +238,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                     <div className="flex flex-row rounded-lg w-[30rem] space-x-8 h-auto">
                         <div className='flex flex-col'>
                             <div className='flex flex-row items-center justify-between mb-2'>
-                                <h1 className="text-lg font-medium text-start">Features Description</h1>
+                                <h1 className="text-lg font-medium whitespace-normal text-start text-ellipsis">Features Description</h1>
                                 <div className="text-sm text-gray-400">
                                     {`${featuresDesLength - featureDes.length}/${featuresDesLength} remaining`}
                                 </div>
@@ -291,7 +283,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                         {photo4.map((imageSrc, index) => (
                             <div key={index} className="relative">
                                 <div
-                                    onClick={() => handleImageUploadClick4(index)}
+                                    onDoubleClick={() => handleImageUploadClick4(index)}
                                     className="flex flex-col justify-center p-2 text-center border-2 border-gray-300 border-dashed rounded cursor-pointer w-36 h-36"
                                     style={{ background: "rgba(194, 194, 194, 0.56)" }}
                                 >
@@ -322,6 +314,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                                 )}
                             </div>
                         ))}
+
                         <div
                             className="flex p-2 text-center border-2 border-gray-300 border-dashed rounded cursor-pointer w-36 h-36"
                             onClick={addImageBox4}

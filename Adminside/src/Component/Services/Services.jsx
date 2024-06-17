@@ -32,6 +32,7 @@ const Services = () => {
         fetchServices();
     }, []);
 
+
     const handleClosePopup = () => {
         setIsPopupOpen(false);
         setEditingIndex(null);
@@ -131,7 +132,7 @@ const Services = () => {
                         onDelete={handleDelete}
                     />
                 )}
-                <div className='w-4/5 p-6 bg-white rounded-lg shadow-lg ml-[16rem]'>
+                <div className='2xl:w-4/5 3xl:w-4/5 lg:w-[45rem] xl:w-3/4 p-6 bg-white rounded-lg shadow-lg ml-[16rem]  '>
                     <div className="grid grid-cols-1 gap-3 px-2 pt-[2rem] pb-[10rem] rounded-lg md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-7">
                         {filteredServices.map((service, index) => (
                             <div
@@ -147,7 +148,7 @@ const Services = () => {
                                 <div className="flex items-center justify-center w-[6rem] h-20 mb-4 mt-4 bg-[#F5F5F5] border-2 border-[#2E2E2E0D] rounded-md">
                                     {service.Photos && <img src={service.Photos} alt={service.ServiceName} className="object-cover w-full h-full rounded-md" />}
                                 </div>
-                                <span className="text-lg font-semibold whitespace-nowrap">{service.ServiceName}</span>
+                                <span className="text-lg font-semibold whitespace-normal text-ellipsis">{service.ServiceName}</span>
                                 <div className="flex items-center mt-4 space-x-2">
                                     <button onClick={(e) => { e.stopPropagation(); togglePublished(e, index); }}>
                                         {service.Active ? <BiShow className="p-1 text-gray-600 border border-gray-300 rounded-md" size={24} /> : <BiHide className="p-1 text-gray-400 border border-gray-300 rounded-md" size={24} />}

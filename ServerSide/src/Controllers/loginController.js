@@ -15,29 +15,29 @@ const createJWT = (user) => {
 
   );
 };
-const createUser = async (req, res) => {
-  try {
-    let data = req.body;
-    const { Email, Password } = data;
+// const createUser = async (req, res) => {
+//   try {
+//     let data = req.body;
+//     const { Email, Password } = data;
 
-    if (!Email || !Password) {
-      return res
-        .status(400)
-        .send({ status: false, message: "All fields are required" });
-    }
+//     if (!Email || !Password) {
+//       return res
+//         .status(400)
+//         .send({ status: false, message: "All fields are required" });
+//     }
 
-    const newUser = new loginModel(data);
-    await newUser.save();
+//     const newUser = new loginModel(data);
+//     await newUser.save();
 
-    return res.status(201).send({
-      status: true,
-      message: "User created successfully",
+//     return res.status(201).send({
+//       status: true,
+//       message: "User created successfully",
 
-    });
-  } catch (error) {
-    return res.status(500).send({ status: false, message: error.message });
-  }
-};
+//     });
+//   } catch (error) {
+//     return res.status(500).send({ status: false, message: error.message });
+//   }
+// };
 
 
 const userLogin = async (req, res) => {
@@ -108,7 +108,7 @@ const deleteUser = async (req, res) => {
 
 
 module.exports = {
-  createUser,
+  // createUser,
   userLogin,
   logout,
   getusersData,

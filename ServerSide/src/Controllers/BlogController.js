@@ -2,6 +2,62 @@ const BlogModel = require("../Models/BlogModel");
 const aws = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
 
+
+const {
+    S3Client,
+    PutObjectCommand,
+    GetObjectCommand,
+    DeleteObjectCommand,
+    CopyObjectCommand,
+} = require("@aws-sdk/client-s3");
+
+// Configure AWS S3 client
+const s3Client = new S3Client({
+    // Replace with your AWS region
+    region: "ap-south-1",
+
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+});
+const saveBlogImage = async (req, res) => {
+    console.log("s", saveBlogImage);
+
+    const file = req.files[0];
+    // console.log("first error", file);
+    const fileNameParts = file.originalname.split(".");
+    const fileExtension = fileNameParts[fileNameParts.length - 1];
+    const fileMimeType = file.mimetype;
+    let uuid = uuidv4();
+    const input = {
+        // PutObjectRequest
+        Body: file.buffer, // required
+        Bucket: "20palnesto-storage24", // required
+        Key: uuid, // requiredz
+        Metadata: {
+            format: fileExtension, // Add metadata indicating the format is JPEG
+        },
+        ContentType: fileMimeType, // Set the ContentType to the MIME type for JPEG images
+    };
+    console.log("file", file.originalname);
+    const uploadCommand = new PutObjectCommand(input);
+
+    s3Client
+        .send(uploadCommand)
+        .then((response) => {
+            // console.log("r", response);
+            let imageId = response.$metadata.requestId;
+
+            let awsImageUrl = `https://20palnesto-storage24.s3.ap-south-1.amazonaws.com/${uuid}`;
+
+            return res.send({ imageUrl: awsImageUrl });
+        })
+        .catch((error) => {
+            console.error("Error uploading file:", error);
+            return res.status(500).json({ error: "Error uploading file" });
+        });
+};
 const CreateBlog = async (req, res) => {
     try {
         const { BlogName, servDescription, photo1, Active,
@@ -112,6 +168,7 @@ const DeleteByBlogId = async (req, res) => {
 };
 
 module.exports = {
+    saveBlogImage,
     CreateBlog,
     getBlog,
     getByBlogId,
