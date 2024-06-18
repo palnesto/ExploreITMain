@@ -4,12 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install:admin": "cd Adminside && npm install",
-    "install:server": "cd ServerSide && npm install",
-    "build:admin": "cd Adminside && npm run build",
-    "build": "npm run install:admin && npm run install:server",
     "start:admin": "cd Adminside && npm start",
     "start:server": "cd ServerSide && set PORT=3000 && npm start",
+    "build:admin": "cd Adminside && npm run build",
+    "build": "npm run build:admin",
     "start": "concurrently \"npm run start:admin\" \"npm run start:server\""
   },
   "keywords": [],
