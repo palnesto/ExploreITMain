@@ -1,0 +1,20 @@
+{
+  "name": "ExploreITMain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:admin": "cd Adminside && npm start",
+    "start:server": "cd ServerSide && set PORT=3000 && npm start",
+    
+
+    "start": "concurrently \"npm run start:admin\" \"npm run start:server\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+    
+  }
+}
