@@ -1,3 +1,4 @@
+
 {
   "version": 2,
   "name": "connectingids",
@@ -11,14 +12,12 @@
       "src": "Adminside/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "Adminside/dist",
-        "buildCommand": "cd Adminside && npm install && npm run build"
+        "distDir": "Adminside/dist"
       }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "ServerSide/src/index.js" },
-    { "src": "/(.*)", "dest": "/Adminside/dist/$1" }
+    { "src": "/(.*)", "dest": "ServerSide/src/index.js" }
   ],
   "outputs": [".svelte-kit/*", ".vercel/*"]
 }
