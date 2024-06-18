@@ -18,5 +18,7 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "ServerSide/src/index.js" },
     { "src": "/(.*)", "dest": "/Adminside/dist/$1" }
-  ]
+  ],
+  "outputs": [".svelte-kit/*", ".vercel/*"]
+
 }
