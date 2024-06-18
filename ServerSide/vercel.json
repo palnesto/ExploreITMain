@@ -11,7 +11,8 @@
       "src": "Adminside/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "Adminside/dist"
+        "distDir": "Adminside/dist",
+        "buildCommand": "cd Adminside && npm install && npm run build"
       }
     }
   ],
@@ -20,5 +21,4 @@
     { "src": "/(.*)", "dest": "/Adminside/dist/$1" }
   ],
   "outputs": [".svelte-kit/*", ".vercel/*"]
-
 }
