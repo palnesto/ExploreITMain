@@ -72,6 +72,8 @@ const Subservice = () => {
             await axios.delete(`${API_BASE_URL}/v1/deletsubServicebyId/${serviceToDelete.id}`);
             setServices(services.filter(service => service.id !== serviceToDelete.id));
             handleClosePopup();
+            toast.success("Subservice deleted successfully");
+
         } catch (error) {
             console.error("Error deleting service:", error);
             toast.error("An error occurred while deleting the service");
