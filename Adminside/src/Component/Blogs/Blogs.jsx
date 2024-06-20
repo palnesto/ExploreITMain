@@ -71,6 +71,7 @@ const Blogs = () => {
             await axios.delete(`${API_BASE_URL}/v1/deletBlogbyId/${blogToDelete.id}`);
             setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id));
             handleClosePopup();
+            toast.success("Blog deleted successfully");
         } catch (error) {
             console.error("Error deleting blog:", error);
             toast.error("An error occurred while deleting the blog");

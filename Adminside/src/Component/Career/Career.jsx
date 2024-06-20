@@ -71,6 +71,8 @@ const Careers = () => {
             await axios.delete(`${API_BASE_URL}/v1/deletCareerbyId/${careerToDelete.id}`);
             setCareers(careers.filter(career => career.id !== careerToDelete.id));
             handleClosePopup();
+            toast.success("career deleted successfully");
+
         } catch (error) {
             console.error("Error deleting career:", error);
             toast.error("An error occurred while deleting the career");

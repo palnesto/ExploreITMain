@@ -14,7 +14,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:444"
+      "http://localhost:444",
+      "http://localhost:80",
+      "http://localhost:3000",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
