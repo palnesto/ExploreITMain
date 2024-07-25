@@ -4,8 +4,7 @@ const nodemailer = require("nodemailer");
 
 const userformData = async (req, res) => {
   try {
-    const { _id, Name, Email, Message, Number } = req.body;
-    console.log(req.body);
+    const { _id, Name, Email, Service, Number, Designation, Website, ServiceInterested, ProjectTitle, Budget, Description, Timeline, Technologies, Requirments, Platform, Contraints, Area, Experience, Reference, AddiInfo } = req.body;
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -18,17 +17,30 @@ const userformData = async (req, res) => {
     const mailOptions = {
       from: "palnesto886@gmail.com",
       to: "info@palnesto.biz",
-      subject: "Submission for palnesto.com",
+      subject: "Submission for ExploreIt",
       text: `
         Name: ${Name}
-      
-        Email :${Email}
-        Number:${Number}
-        Message: ${Message}
+        Email: ${Email}
+        Number: ${Number}
+         Website: ${Website}
+        Service: ${Service}
+        Designation: ${Designation}
+        Service Interested: ${ServiceInterested}
+        Project Title: ${ProjectTitle}
+        Budget: ${Budget}
+        Description: ${Description}
+        Timeline: ${Timeline}
+        Technologies: ${Technologies}
+        Requirements: ${Requirments}
+        Platform: ${Platform}
+        Constraints: ${Contraints}
+        Area: ${Area}
+        Experience: ${Experience}
+        Reference: ${Reference}
+        Additional Info: ${AddiInfo}
       `,
     };
 
-    // Convert sendMail to use Promise
     await new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -39,9 +51,7 @@ const userformData = async (req, res) => {
       });
     });
 
-    console.log("Email sent");
-
-    const datacreate = await userFormModel.create({ Name, Email, Message, Number });
+    const datacreate = await userFormModel.create({ Name, Email, Service, Number, Designation, Website, ServiceInterested, ProjectTitle, Budget, Description, Timeline, Technologies, Requirments, Platform, Contraints, Area, Experience, Reference, AddiInfo });
     return res.status(201).send({
       status: true,
       msg: "Data created successfully, and email sent",
@@ -70,12 +80,12 @@ const getuserformData = async (req, res) => {
 
 const updateuserformData = async (req, res) => {
   try {
-    const { Name, Email, Message, Number } = req.body;
+    const { Name, Email, Service, Number, Designation, Website, ServiceInterested, ProjectTitle, Budget, Description, Timeline, Technologies, Requirments, Platform, Contraints, Area, Experience, Reference, AddiInfo } = req.body;
     const userHomeId = req.params.userHomeId;
 
     const UpdateuserHome = await userFormModel.findByIdAndUpdate(
       userHomeId,
-      { $set: { Name, Email, Message, Number } },
+      { $set: { Name, Email, Service, Number, Designation, Website, ServiceInterested, ProjectTitle, Budget, Description, Timeline, Technologies, Requirments, Platform, Contraints, Area, Experience, Reference, AddiInfo } },
       { new: true }
     );
 

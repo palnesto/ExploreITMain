@@ -15,8 +15,10 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:444",
-      "http://localhost:80",
+      "http://localhost:5174",
       "http://localhost:3000",
+      "http://localhost:80",
+
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,

@@ -16,7 +16,7 @@ const Services = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [services, setServices] = useState([]);
     const { token } = useLoginStore();
-    // Fetch services on load
+
     useEffect(() => {
         const fetchServices = async () => {
             try {
@@ -98,7 +98,6 @@ const Services = () => {
         service.ServiceName.toLowerCase().includes(searchQuery.toLowerCase())
     ) : [];
 
-
     return (
         <>
             <ToastContainer position="top-center" />
@@ -144,7 +143,7 @@ const Services = () => {
                             <div
                                 key={index}
                                 className="flex flex-col items-center p-4 w-[12rem] transition-shadow duration-300 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg relative"
-                                onClick={() => navigate("Subservice")}
+                                onClick={() => navigate(`/subservice/${service.id}`)} // Pass the serviceId when navigating
                             >
                                 <div className='absolute flex flex-row items-center top-2 left-2'>
                                     <div
@@ -165,9 +164,6 @@ const Services = () => {
                         ))}
                     </div>
                 </div>
-
-
-
             </div>
         </>
     );

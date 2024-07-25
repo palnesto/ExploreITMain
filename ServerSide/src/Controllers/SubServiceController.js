@@ -1,4 +1,4 @@
-const SubServiceModel = require("../Models/SubServiceModel");
+const SubServiceModel = require("../Models/SubServicemodel");
 const aws = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
 const {
@@ -8,6 +8,8 @@ const {
     DeleteObjectCommand,
     CopyObjectCommand,
 } = require("@aws-sdk/client-s3");
+// Make sure the model name is consistent
+
 
 // Configure AWS S3 client
 const s3Client = new S3Client({
@@ -20,34 +22,26 @@ const s3Client = new S3Client({
     },
 });
 const saveSubimg = async (req, res) => {
-    console.log("s", saveSubimg);
-
     const file = req.files[0];
-    // console.log("first error", file);
     const fileNameParts = file.originalname.split(".");
     const fileExtension = fileNameParts[fileNameParts.length - 1];
     const fileMimeType = file.mimetype;
     let uuid = uuidv4();
     const input = {
-        // PutObjectRequest
-        Body: file.buffer, // required
-        Bucket: "20palnesto-storage24", // required
-        Key: uuid, // requiredz
+        Body: file.buffer,
+        Bucket: "20palnesto-storage24",
+        Key: uuid,
         Metadata: {
-            format: fileExtension, // Add metadata indicating the format is JPEG
+            format: fileExtension,
         },
-        ContentType: fileMimeType, // Set the ContentType to the MIME type for JPEG images
+        ContentType: fileMimeType,
     };
     const uploadCommand = new PutObjectCommand(input);
 
     s3Client
         .send(uploadCommand)
         .then((response) => {
-            // console.log("r", response);
-            let imageId = response.$metadata.requestId;
-
             let awsImageUrl = `https://20palnesto-storage24.s3.ap-south-1.amazonaws.com/${uuid}`;
-
             return res.send({ imageUrl: awsImageUrl });
         })
         .catch((error) => {
@@ -55,9 +49,9 @@ const saveSubimg = async (req, res) => {
             return res.status(500).json({ error: "Error uploading file" });
         });
 };
+
 const SubServiceData = async (req, res) => {
     try {
-
         const {
             Photo1,
             SubServiceName,
@@ -68,10 +62,13 @@ const SubServiceData = async (req, res) => {
             AddFeatures,
             Photo4,
             Active,
+            serviceId
         } = req.body;
+
         const id = uuidv4();
-        const newPrimary = new SubServiceModel({
+        const newSubService = new SubServiceModel({
             id,
+            serviceId,
             Photo1,
             SubServiceName,
             Photo2,
@@ -83,18 +80,15 @@ const SubServiceData = async (req, res) => {
             Active,
         });
 
-
-        const savedPrimary = await newPrimary.save();
-
+        const savedSubService = await newSubService.save();
 
         return res.status(201).send({
             status: true,
-            msg: "NewSubService created successfully",
-            data: savedPrimary,
+            msg: "New SubService created successfully",
+            data: savedSubService,
         });
 
     } catch (err) {
-
         return res.status(500).send({ status: false, msg: "Server error", error: err.message });
     }
 };
@@ -104,7 +98,7 @@ const getsubServiceData = async (req, res) => {
         const SubServiceData = await SubServiceModel.find();
         res.status(200).send({
             status: true,
-            msg: "PrimaryData retrieved succesfully",
+            msg: "SubService data retrieved successfully",
             data: SubServiceData,
         });
     } catch (err) {
@@ -123,10 +117,22 @@ const getBySubServiceId = async (req, res) => {
     });
     return res
         .status(200)
-        .send({ status: true, msg: "Data fetch succesfully", data: SubServiceData });
+        .send({ status: true, msg: "Data fetch successfully", data: SubServiceData });
 };
 
-
+const getsubServiceDataByServiceId = async (req, res) => {
+    try {
+        const { serviceId } = req.params;
+        const SubServiceData = await SubServiceModel.find({ serviceId });
+        res.status(200).send({
+            status: true,
+            msg: "SubService data retrieved successfully",
+            data: SubServiceData,
+        });
+    } catch (err) {
+        return res.status(500).send({ status: false, msg: "server error", error: err.message });
+    }
+};
 
 const updatesubServiceData = async (req, res) => {
     try {
@@ -143,8 +149,6 @@ const updatesubServiceData = async (req, res) => {
         } = req.body;
 
         const subServiceId = req.params.subServiceId;
-
-
 
         if (!subServiceId) {
             return res.status(400).send({ status: false, msg: "subServiceId parameter is required" });
@@ -191,11 +195,10 @@ const updatesubServiceData = async (req, res) => {
     }
 };
 
-
 const DeletesubServicedata = async (req, res) => {
     try {
         const result = await SubServiceModel.deleteMany({});
-        res.send(`Deleted ${result.deletedCount}SubServiceData`);
+        res.send(`Deleted ${result.deletedCount} SubServiceData`);
     } catch (error) {
         console.error(error);
         res
@@ -204,15 +207,14 @@ const DeletesubServicedata = async (req, res) => {
     }
 };
 
-
 const DeleteBySubServiceId = async (req, res) => {
     try {
         let SubServiceId = req.params.SubServiceId;
 
-        const deletionResult = await SubServiceModel.deleteOne({ SubServiceId: SubServiceId });
+        const deletionResult = await SubServiceModel.deleteOne({ id: SubServiceId });
 
         if (deletionResult.deletedCount === 0) {
-            return res.status(404).send({ status: false, message: "Page not found" });
+            return res.status(404).send({ status: false, message: "SubService not found" });
         }
 
         return res.status(200).send({ status: true, message: "Data deleted successfully." });
@@ -228,5 +230,6 @@ module.exports = {
     getBySubServiceId,
     updatesubServiceData,
     DeletesubServicedata,
-    DeleteBySubServiceId
+    DeleteBySubServiceId,
+    getsubServiceDataByServiceId
 };

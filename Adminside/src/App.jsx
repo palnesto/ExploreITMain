@@ -26,8 +26,8 @@ function App() {
             ) : (
               <>
                 <Route path="/" element={<Services />} />
-                <Route path="/Subservice" element={<Subservice />} />
-                <Route path="/SubServicePopup" element={<SubServicePopup />} />
+                <Route path="/subservice/:serviceId" element={<Subservice />} />
+                <Route path="/subServicePopup" element={<SubServicePopup />} />
                 <Route path="/Career" element={<Career />} />
                 <Route path="/Blogs" element={<Blogs />} />
               </>
