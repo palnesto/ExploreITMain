@@ -6,7 +6,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../config";
 import { toast } from "react-toastify";
 
-const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
+const SubServicePopup = ({ onClose, onSave, initialData, onDelete, serviceId }) => {
     const [subServiceName, setSubServiceName] = useState("");
     const [subServiceDes, setSubServiceDes] = useState('');
     const [photo1, setPhoto1] = useState(null);
@@ -120,6 +120,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
             Photo4: photo4,
             FeatureDes: featureDes,
             AddFeatures: addFeatures,
+            serviceId: serviceId // Add serviceId to the data
         };
         onSave(data);
     };
@@ -133,7 +134,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                 </div>
                 <div className="flex flex-col ml-[1rem] mt-8">
                     <h1 className="text-2xl font-bold text-black">ERP Solutions</h1>
-                    <div className="flex flex-row justify-between">
+                    {/* <div className="flex flex-row justify-between">
                         <div className='flex flex-row'>
                             <div
                                 className="flex items-center justify-center w-[10rem] p-4 mb-6 bg-[#F5F5F5] rounded-md cursor-pointer"
@@ -158,7 +159,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                                 <p className="mt-8 ml-4 text-sm text-gray-500">JPG, PNG, Max 4MB</p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <label className="text-lg font-normal text-start"> Sub Service Name</label>
                     <input
                         className="w-[20rem] mb-4 h-10 bg-[#F5F5F5] border-2 border-[#2E2E2E0D] rounded px-2"
@@ -191,6 +192,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                             accept="image/*"
                         />
                     </div>
+
                     <div className='flex flex-row items-start space-x-6'>
                         <div className='flex flex-col'>
                             <div className='flex flex-row items-center justify-between mb-2'>
@@ -207,7 +209,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                                 placeholder="Type something longer here....."
                             ></textarea>
                         </div>
-                        <div className='flex flex-col'>
+                        {/* <div className='flex flex-col'>
                             <div className='flex flex-row items-center justify-between mb-2'>
                                 <h1 className="text-lg font-medium text-start">Upload Service Photo</h1>
                                 <div className="text-sm text-gray-400">
@@ -233,7 +235,7 @@ const SubServicePopup = ({ onClose, onSave, initialData, onDelete }) => {
                                     accept="image/*"
                                 />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="flex flex-row rounded-lg w-[30rem] space-x-8 h-auto">
                         <div className='flex flex-col'>
@@ -356,6 +358,7 @@ SubServicePopup.propTypes = {
         AddFeatures: PropTypes.arrayOf(PropTypes.string),
     }),
     onDelete: PropTypes.func,
+    serviceId: PropTypes.string.isRequired,
 };
 
 export default SubServicePopup;

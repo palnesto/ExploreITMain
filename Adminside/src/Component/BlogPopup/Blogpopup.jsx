@@ -11,7 +11,7 @@ const Blogpopup = ({ onClose, onSubmit, initialData, onDelete }) => {
     const [description, setDescription] = useState(initialData?.servDescription || '');
     const [image, setImage] = useState(initialData?.photo1 || null);
 
-    const maxDescriptionLength = 300;
+    const maxDescriptionLength = 600;
     const fileInputRef = useRef(null);
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];

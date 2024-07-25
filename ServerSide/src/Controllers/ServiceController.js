@@ -1,4 +1,6 @@
 const ServiceModel = require("../Models/ServiceModel");
+const SubServicemodel = require("../Models/SubServicemodel");
+
 const aws = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
 
@@ -104,16 +106,32 @@ const getPrimaryData = async (req, res) => {
 
 const getByPrimaryId = async (req, res) => {
     const PrimaryId = req.params.PrimaryId;
-    console.log("pri", PrimaryId)
-    const PrimaryData = await ServiceModel.findOne({
-        id: PrimaryId,
-        isDeleted: false,
-    });
+    try {
+        const PrimaryData = await ServiceModel.findOne({
+            id: PrimaryId,
+            isDeleted: false,
+        });
 
-    return res
-        .status(200)
-        .send({ status: true, msg: "Data fetch succesfully", data: PrimaryData });
+        const SubServiceData = await SubServicemodel.find({
+            serviceId: PrimaryId,
+            isDeleted: false,
+            Active: true,
+        });
+
+        return res.status(200).send({
+            status: true,
+            msg: "Data fetch successfully",
+            data: { service: PrimaryData, subservices: SubServiceData }
+        });
+    } catch (error) {
+        return res.status(500).send({
+            status: false,
+            msg: "server error",
+            error: error.message
+        });
+    }
 };
+
 
 const updatePrimaryData = async (req, res) => {
     try {

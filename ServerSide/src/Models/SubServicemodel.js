@@ -1,9 +1,13 @@
-const { timeStamp } = require("console");
 const mongoose = require("mongoose");
-const SubService = new mongoose.Schema(
+
+const SubServiceSchema = new mongoose.Schema(
     {
         id: {
             type: String
+        },
+        serviceId: {
+            type: String,
+            required: true
         },
         Photo1: {
             type: String,
@@ -28,7 +32,6 @@ const SubService = new mongoose.Schema(
         },
         Photo4: {
             type: [String]
-
         },
         Active: {
             type: Boolean,
@@ -38,7 +41,8 @@ const SubService = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
-    }, { timestamps: true }
-
+    },
+    { timestamps: true }
 );
-module.exports = mongoose.model("Subservice", SubService)
+
+module.exports = mongoose.model("SubService", SubServiceSchema);
